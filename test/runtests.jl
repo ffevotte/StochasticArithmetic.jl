@@ -43,7 +43,6 @@ using Formatting
         end
 
         @testset "split" begin
-            # Simple test for the error-free split of a Float64
             function checkSplit(a)
                 binRepr(x) = format("{:b}", Int(significand(x)*2^(53)))
                 (x, y) = split(a)
@@ -80,7 +79,22 @@ using Formatting
             end
         end
     end
-end
 
-@itest begin
+    @testset "SFloat64" begin
+        let
+            A = Float64[1 2 3;
+                        4 5 6;
+                        7 8 10]
+            B = Float64[1 ; 2 ; 3]
+            Xref = A \ B
+
+            function check(Xsto)
+                value(Xsto[1]) ≈ Xref[1]    || return false
+                value(Xsto[2]) ≈ Xref[2]    || return false
+                abs(value(Xsto[3])) < 1e-15 || return false
+                true
+            end
+            @test all(check(SFloat64.(A) \ SFloat64.(B)) for _ in 1:10)
+        end
+    end
 end

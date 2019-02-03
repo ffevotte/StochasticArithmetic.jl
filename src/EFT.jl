@@ -1,56 +1,54 @@
 module EFT
 export twoSum, twoProd, twoDiv
 
-# * Documentation of function
+# * Documentation of functions
 
-"""
+@doc raw"""
     twoSum(a, b)
 
 Error-Free Transformation for the sum of two numbers:
 
 (x,y) = twoSum(a,b)
 
-  <=>
+  ``\Leftrightarrow``
 
-x = fl(a+b)  and  x+y == a+b
+``x = fl(a+b)``  and  ``x+y = a+b``
 """
 function twoSum end
 
 
-"""
+@doc raw"""
     twoProd(a, b)
 
 Error-Free Transformation for the product of two numbers:
 
 (x,y) = twoProd(a, b)
 
-  <=>
+  ``\Leftrightarrow``
 
-x = fl(a*b)  and  x+y == a*b
+``x = fl(a\,b)``  and  ``x+y = a\,b``
 """
 function twoProd end
 
 
-"""
+@doc raw"""
     twoDiv(a, b)
 
-Approximate transformation for the division The transformation in not exact (the
-error is not representable) but at least the sign of y should be correct:
+Approximate transformation for the division. The transformation is not exact
+(the error is not representable) but at least the sign of y should be correct:
 
-(x, y) == twoDiv(a, b)
+(x, y) = twoDiv(a, b)
 
-  <=>
+  ``\Leftrightarrow``
 
-x = fl(a/b)  and  y ≈ a/b - x
+``x = fl(a/b)``  and  ``y ≈ a/b - x``
 """
 function twoDiv end
 
 
 # * Generic implementation
 
-"""
-Generic implementation of twoSum. Uses the algorithm by D. Knuth.
-"""
+# Generic implementation of twoSum. Uses the algorithm by D. Knuth.
 function twoSum(a, b)
     x = a + b
     z = x - a
@@ -59,16 +57,16 @@ function twoSum(a, b)
 end
 
 
-"""
+@doc raw"""
     split(a)
 
 Error-free splitting of a FP number:
 
 (x,y) = split(a)
 
-<=>
+  ``\Leftrightarrow``
 
-x+y == a, and the representations of x and y do not overlap
+``x+y = a``, and the representations of x and y do not overlap
 
 This implementation uses the algorithm by Dekker.
 """
@@ -86,9 +84,7 @@ function Base.split(a)
     return (x, y)
 end
 
-"""
-Generic implementation of TwoProd. Uses the algorithm by Veltkamp.
-"""
+# Generic implementation of TwoProd. Uses the algorithm by Veltkamp.
 function twoProd(a, b)
     x = a * b
     (a1, a2) = split(a)

@@ -1,3 +1,10 @@
+
+"""
+Stochastic Float64
+
+This type represents a double-precision (64-bit) floating-point number, on which
+every operation get randomly rounded upwards or downwards.
+"""
 struct SFloat64
     value :: Float64
 end

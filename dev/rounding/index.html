@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Rounding modes · StochasticArithmetic.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>StochasticArithmetic.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../">Home</a></li><li><a class="toctext" href="../EFT/">Error-Free Transformations</a></li><li class="current"><a class="toctext" href>Rounding modes</a><ul class="internal"></ul></li><li><a class="toctext" href="../sfloat/">Stochastic FP types</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href>Rounding modes</a></li></ul><a class="edit-page" href="https://github.com/ffevotte/StochasticArithmetic.jl/blob/master/docs/src/rounding.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Rounding modes</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="rounding-1" href="#rounding-1">Floating-Point operations with specific rounding mode</a></h1><p>Directed roundings for an operation <span>$a\circ b$</span> can be computed using EFTs in the following way: let <span>$(x, \delta) = \bigcirc_{\text{eft}}(a, b)$</span>. One of three situations can happen:</p><ul><li><p>if <span>$\delta = 0$</span>, then no rounding occurred. In this case, <span>$x = \lozenge(a\circ b) = a\circ b$</span>.</p></li><li><p>if <span>$\delta &gt; 0$</span>, then a rounding occurred, which was directed downwards. In this case, <span>$x = \lozenge(a\circ b) = \bigtriangledown(a\circ b)$</span> and <span>$\bigtriangleup(a\circ b) = \text{successor}(x)$</span>.</p></li><li><p>conversely, if <span>$\delta &gt; 0$</span>, then <span>$x = \lozenge(a\circ b) = \bigtriangleup(a\circ b)$</span> and <span>$\bigtriangleup(a\circ b) = \text{predecessor}(x)$</span>.</p></li></ul><p>This strategy is used to implement basic FP operations with directed rounding. In addition to IEEE-754 directed roundings : upwards (<code>UP</code>) and downwards (<code>DWN</code>), an additional random (<code>RND</code>) rounding mode is introduced, which chooses one of the two directed roundings randomly with probability 0.5.</p><pre><code class="language-julia-repl">julia&gt; +(DWN, 0.1, 0.3)
+0.39999999999999997
+
+julia&gt; +(UP,  0.1, 0.3)
+0.4
+
+julia&gt; +(RND, 0.1, 0.3)
+0.39999999999999997</code></pre><pre><code class="language-julia-repl">julia&gt; *(DWN, 0.1, 0.3)
+0.03
+
+julia&gt; *(UP,  0.1, 0.3)
+0.030000000000000002
+
+julia&gt; *(RND, 0.1, 0.3)
+0.030000000000000002</code></pre><pre><code class="language-julia-repl">julia&gt; /(DWN, 0.1, 0.3)
+0.3333333333333333
+
+julia&gt; /(UP,  0.1, 0.3)
+0.33333333333333337
+
+julia&gt; /(RND, 0.1, 0.3)
+0.3333333333333333</code></pre><footer><hr/><a class="previous" href="../EFT/"><span class="direction">Previous</span><span class="title">Error-Free Transformations</span></a><a class="next" href="../sfloat/"><span class="direction">Next</span><span class="title">Stochastic FP types</span></a></footer></article></body></html>

@@ -101,7 +101,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Stochastic FP types",
     "title": "StochasticArithmetic.SFloat64",
     "category": "type",
-    "text": "Stochastic Float64\n\nThis type represents a double-precision (64-bit) floating-point number, on which every operation get randomly rounded upwards or downwards.\n\n\n\n\n\n"
+    "text": "Stochastic Float64\n\nThis type represents a double-precision (64-bit) floating-point number, on which every operation gets randomly rounded upwards or downwards.\n\n\n\n\n\n"
 },
 
 {

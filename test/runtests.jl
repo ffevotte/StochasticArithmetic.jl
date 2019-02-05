@@ -1,6 +1,6 @@
 using StochasticArithmetic
 using StochasticArithmetic.EFT
-using Test
+using Test, Jive
 using Formatting
 using LinearAlgebra
 using Random

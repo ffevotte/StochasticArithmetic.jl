@@ -36,6 +36,8 @@ macro define_stochastic_type(name)
         Base.conj(x::$name) = x
 
         Base.promote_rule(::Type{$name}, ::Type{<:Number}) = $name
+
+        Base.abs(x::$name) = $name(abs(x.value))
     end |> esc
 end
 

@@ -206,6 +206,9 @@ end
             end
             @test all(check(SFloat64.(A) \ SFloat64.(B)) for _ in 1:10)
         end
+
+        let x = -0.1;  @test value(abs(SFloat64(x))) ≈ -x end
+        let x =  0.1;  @test value(abs(SFloat64(x))) ≈  x end
     end
 
     @testset "reliable_digits" begin

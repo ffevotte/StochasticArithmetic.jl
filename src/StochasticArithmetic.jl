@@ -1,5 +1,5 @@
 module StochasticArithmetic
-export UP, DWN, RND, SFloat64, value, @reliable_digits
+export UP, DWN, RND, SFloat64, SFloat32, value, @reliable_digits
 
 include("EFT.jl")
 include("rounding.jl")

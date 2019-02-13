@@ -216,9 +216,20 @@ end
         end
 
         let
+            mu, s = (@reliable_digits dot(SFloat32.(x1), SFloat32.(y1)))
+            @test mu ≈ dot(Float32.(x1), Float32.(y1))
+            @test s  ≈ 4.87         atol = 0.01
+        end
+
+        let
             mu, s = (@reliable_digits dot(SFloat64.(x2), SFloat64.(y2)))
             @test mu ≈ dot(x2, y2)  atol = 0.01
-            @test s  ≈ 3.60         atol = 0.01
+            @test s  ≈ 3.53         atol = 0.01
+        end
+
+        let
+            mu, s = (@reliable_digits dot(SFloat32.(x2), SFloat32.(y2)))
+            @test s  ≈ -0.25        atol = 0.01
         end
     end
 end

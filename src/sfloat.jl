@@ -9,25 +9,42 @@ struct SFloat64 <: Number
     value :: Float64
 end
 
-SFloat64(x::SFloat64) = SFloat64(x.value)
-value(x::SFloat64) = x.value
+"""
+Stochastic Float32
+
+This type represents a single-precision (32-bit) floating-point number, on which
+every operation gets randomly rounded upwards or downwards.
+"""
+struct SFloat32 <: Number
+    value :: Float32
+end
 
 import Base: +, -, *, /
-+(a::SFloat64, b::SFloat64) = SFloat64(+(RND, a.value,  b.value))
-*(a::SFloat64, b::SFloat64) = SFloat64(*(RND, a.value,  b.value))
--(a::SFloat64, b::SFloat64) = SFloat64(+(RND, a.value, -b.value))
-/(a::SFloat64, b::SFloat64) = SFloat64(/(RND, a.value,  b.value))
+macro define_stochastic_type(name)
+    quote
+        $name(x::$name) = $name(x.value)
+        value(x::$name) = x.value
 
-Base.zero(::SFloat64) = SFloat64(0.)
-Base.zero(::Type{SFloat64}) = SFloat64(0.)
-Base.one(::Type{SFloat64}) = SFloat64(1.)
-Base.conj(x::SFloat64) = x
+        +(a::$name, b::$name) = $name(+(RND, a.value,  b.value))
+        *(a::$name, b::$name) = $name(*(RND, a.value,  b.value))
+        -(a::$name, b::$name) = $name(+(RND, a.value, -b.value))
+        /(a::$name, b::$name) = $name(/(RND, a.value,  b.value))
 
-Base.promote_rule(::Type{SFloat64}, ::Type{<:Number}) = SFloat64
+        Base.zero(::$name) = $name(0.)
+        Base.zero(::Type{$name}) = $name(0.)
+        Base.one(::Type{$name}) = $name(1.)
+        Base.conj(x::$name) = x
 
+        Base.promote_rule(::Type{$name}, ::Type{<:Number}) = $name
+    end |> esc
+end
+
+@define_stochastic_type SFloat64
+@define_stochastic_type SFloat32
 
 using Statistics, Formatting
 
+value(x::Number) = x
 deref(x) = x
 deref(x::Array{T,0}) where T = x[]
 macro reliable_digits(expr)

@@ -190,28 +190,88 @@ end
         end
     end
 
-    @testset "SFloat64" begin
-        let
-            A = Float64[1 2 3;
-                        4 5 6;
-                        7 8 10]
-            B = Float64[1 ; 2 ; 3]
-            Xref = A \ B
+    for T in (SFloat64, SFloat32)
+        @testset "$T" begin
+            @testset "4 ops" begin
+                let x = T(0.1) + T(0.3)
+                    @test x isa T
+                    @test value(x) ≈ 0.4
+                end
 
-            function check(Xsto)
-                value(Xsto[1]) ≈ Xref[1]    || return false
-                value(Xsto[2]) ≈ Xref[2]    || return false
-                abs(value(Xsto[3])) < 1e-15 || return false
-                true
+                let x = T(0.1) - T(0.3)
+                    @test x isa T
+                    @test value(x) ≈ -0.2
+                end
+
+                let x = T(0.1) * T(0.3)
+                    @test x isa T
+                    @test value(x) ≈ 0.03
+                end
+
+                let x = T(0.1) / T(0.3)
+                    @test x isa T
+                    @test value(x) ≈ 0.1/0.3
+                end
             end
-            @test all(check(SFloat64.(A) \ SFloat64.(B)) for _ in 1:10)
-        end
 
-        let x = -0.1;  @test value(abs(SFloat64(x))) ≈ -x end
-        let x =  0.1;  @test value(abs(SFloat64(x))) ≈  x end
-        @test SFloat64(1) < 2.
-        @test 1 < SFloat64(2)
-        @test SFloat64(1) < SFloat64(2)
+            @testset "abs" begin
+                let x = -0.1;  @test value(abs(T(x))) ≈ -x end
+                let x =  0.1;  @test value(abs(T(x))) ≈  x end
+            end
+
+            @testset "isless" begin
+                @test T(1) < 2.
+                @test 1    < T(2)
+                @test T(1) < T(2)
+            end
+
+            @testset "linsolve" begin
+                let
+                    tol(SFloat64) = 1e-15
+                    tol(SFloat32) = 1e-6
+
+                    A = Float64[1 2 3;
+                                4 5 6;
+                                7 8 10]
+                    B = Float64[1 ; 2 ; 3]
+                    Xref = A \ B
+
+                    function check(Xsto)
+                        value(Xsto[1]) ≈ Xref[1]     || return false
+                        value(Xsto[2]) ≈ Xref[2]     || return false
+                        abs(value(Xsto[3])) < tol(T) || return false
+                        true
+                    end
+                    @test all(check(T.(A) \ T.(B)) for _ in 1:10)
+                end
+            end
+        end
+    end
+
+    @testset "mixed" begin
+        let
+            x32 = SFloat32(32)
+            x64 = SFloat64(64)
+
+            x = x32 + x64
+            @test x isa SFloat64
+            @test value(x) ≈ 96
+
+            x = x64 + x32
+            @test x isa SFloat64
+            @test value(x) ≈ 96
+
+            x = x64 + 2.0
+            @test x isa SFloat64
+            @test value(x) ≈ 66
+
+            x = 2.0 + x64
+            @test x isa SFloat64
+            @test value(x) ≈ 66
+
+            @test SFloat64(1) < SFloat32(2)
+            @test SFloat32(1) < SFloat64(2)
+        end
     end
 
     @testset "reliable_digits" begin

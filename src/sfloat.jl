@@ -38,6 +38,10 @@ macro define_stochastic_type(name)
         Base.promote_rule(::Type{$name}, ::Type{<:Number}) = $name
 
         Base.abs(x::$name) = $name(abs(x.value))
+        Base.isless(x::$name, y::Number) = isless(value(x), y)
+        Base.isless(x::Number, y::$name) = isless(x, value(y))
+        Base.isless(x::$name, y::$name) = isless(value(x), value(y))
+
     end |> esc
 end
 

@@ -209,6 +209,9 @@ end
 
         let x = -0.1;  @test value(abs(SFloat64(x))) ≈ -x end
         let x =  0.1;  @test value(abs(SFloat64(x))) ≈  x end
+        @test SFloat64(1) < 2.
+        @test 1 < SFloat64(2)
+        @test SFloat64(1) < SFloat64(2)
     end
 
     @testset "reliable_digits" begin

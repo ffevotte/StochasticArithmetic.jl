@@ -1,4 +1,4 @@
-abstract type SFloat <: Number end
+abstract type SFloat <: Real end
 
 """
 Stochastic Float64
@@ -32,26 +32,21 @@ Base.promote_rule(::Type{<:Number}, ::Type{T})        where T<:SFloat = T
 Base.promote_rule(::Type{T},        ::Type{T})        where T<:SFloat = T
 result_type(x::T1, y::T2) where {T1, T2} = promote_rule(T1, T2)
 
-import Base: +, -, *, /
+import Base: +, -, *, /, <
 +(a::SFloat, b::SFloat) = result_type(a, b)(+(RND, a.value,  b.value))
 *(a::SFloat, b::SFloat) = result_type(a, b)(*(RND, a.value,  b.value))
 -(a::SFloat, b::SFloat) = result_type(a, b)(+(RND, a.value, -b.value))
 /(a::SFloat, b::SFloat) = result_type(a, b)(/(RND, a.value,  b.value))
+<(a::SFloat, b::SFloat) = value(a) < value(b)
 
+-(a::T)              where T<:SFloat = T(-a.value)
 Base.zero(::T)       where T<:SFloat = T(0.)
 Base.zero(::Type{T}) where T<:SFloat = T(0.)
 Base.one(::Type{T})  where T<:SFloat = T(1.)
 Base.abs(x::T)       where T<:SFloat = T(abs(value(x)))
 
-Base.conj(x::SFloat) = x
 
-Base.isless(x::SFloat, y::Number) = isless(value(x), y)
-Base.isless(x::Number, y::SFloat) = isless(x,        value(y))
-Base.isless(x::SFloat, y::SFloat) = isless(value(x), value(y))
-
-
-
-using Statistics, Formatting
+using Statistics
 
 value(x::Number) = x
 deref(x) = x

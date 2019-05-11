@@ -212,6 +212,11 @@ end
                     @test x isa T
                     @test value(x) ≈ 0.1/0.3
                 end
+
+                let x = -T(0.1)
+                    @test x isa T
+                    @test value(x) ≈ -0.1
+                end
             end
 
             @testset "abs" begin

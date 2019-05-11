@@ -228,6 +228,18 @@ end
                 @test T(1) < 2.
                 @test 1    < T(2)
                 @test T(1) < T(2)
+
+                @test T(1) <= 2.
+                @test 1    <= T(2)
+                @test T(1) <= T(2)
+
+                @test 2.   > T(1)
+                @test T(2) > 1
+                @test T(2) > T(1)
+
+                @test 2.   >= T(1)
+                @test T(2) >= 1
+                @test T(2) >= T(1)
             end
 
             @testset "linsolve" begin

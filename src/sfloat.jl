@@ -32,12 +32,13 @@ Base.promote_rule(::Type{<:Number}, ::Type{T})        where T<:SFloat = T
 Base.promote_rule(::Type{T},        ::Type{T})        where T<:SFloat = T
 result_type(x::T1, y::T2) where {T1, T2} = promote_rule(T1, T2)
 
-import Base: +, -, *, /, <
+import Base: +, -, *, /, <, <=
 +(a::SFloat, b::SFloat) = result_type(a, b)(+(RND, a.value,  b.value))
 *(a::SFloat, b::SFloat) = result_type(a, b)(*(RND, a.value,  b.value))
 -(a::SFloat, b::SFloat) = result_type(a, b)(+(RND, a.value, -b.value))
 /(a::SFloat, b::SFloat) = result_type(a, b)(/(RND, a.value,  b.value))
 <(a::SFloat, b::SFloat) = value(a) < value(b)
+<=(a::SFloat, b::SFloat) = value(a) <= value(b)
 
 -(a::T)              where T<:SFloat = T(-a.value)
 Base.zero(::T)       where T<:SFloat = T(0.)

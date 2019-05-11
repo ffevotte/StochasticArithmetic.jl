@@ -155,7 +155,7 @@ end
         @testset "split" begin
             function checkSplit(a)
                 binRepr(x) = format("{:b}", Int(significand(x)*2^(53)))
-                (x, y) = split(a)
+                (x, y) = EFT.split(a)
 
                 xTrim = replace(binRepr(x), r"0+$" => "")
                 @test startswith(binRepr(a), xTrim)

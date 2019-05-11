@@ -70,7 +70,7 @@ Error-free splitting of a FP number:
 
 This implementation uses the algorithm by Dekker.
 """
-function Base.split(a)
+function split(a)
     # New methods should be added to compute the correct
     # constant for each FP representation
     #

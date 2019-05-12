@@ -270,24 +270,62 @@ end
             x32 = SFloat32(32)
             x64 = SFloat64(64)
 
+            y32 = 32.f0
+            y64 = 64.0
+
+            # Sto + Sto (mixed prec)
+
+            ## S32 + S64 -> S64
             x = x32 + x64
             @test x isa SFloat64
             @test value(x) ≈ 96
-
             x = x64 + x32
             @test x isa SFloat64
             @test value(x) ≈ 96
 
-            x = x64 + 2.0
-            @test x isa SFloat64
-            @test value(x) ≈ 66
 
-            x = 2.0 + x64
-            @test x isa SFloat64
-            @test value(x) ≈ 66
+            # Sto + Flo (same prec)
 
-            @test SFloat64(1) < SFloat32(2)
-            @test SFloat32(1) < SFloat64(2)
+            ## S64 + F64 -> S64
+            x = x64 + y64
+            @test x isa SFloat64
+            @test value(x) ≈ 128
+            x = y64 + x64
+            @test x isa SFloat64
+            @test value(x) ≈ 128
+
+            ## S32 + F32 -> S32
+            x = x32 + y32
+            @test x isa SFloat32
+            @test value(x) ≈ 64
+            x = y32 + x32
+            @test x isa SFloat32
+            @test value(x) ≈ 64
+
+
+            # Sto + Flo (mixed prec)
+
+            ## S64 + F32 -> S64
+            x = x64 + y32
+            @test x isa SFloat64
+            @test value(x) ≈ 96
+            x = y32 + x64
+            @test x isa SFloat64
+            @test value(x) ≈ 96
+
+            ## F64 + S32 -> S64
+            x = x32 + y64
+            @test x isa SFloat64
+            @test value(x) ≈ 96
+            x = y64 + x32
+            @test x isa SFloat64
+            @test value(x) ≈ 96
+
+
+            # Comparisons
+            @test x32 < x64
+            @test x32 < y64
+            @test y32 < x64
         end
     end
 

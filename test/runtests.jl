@@ -219,9 +219,22 @@ end
                 end
             end
 
-            @testset "abs" begin
-                let x = -0.1;  @test value(abs(T(x))) ≈ -x end
-                let x =  0.1;  @test value(abs(T(x))) ≈  x end
+            @testset "math" begin
+                for x in [-0.1, 0.1]
+                    ax = abs(T(x))
+                    @test ax isa T
+                    @test value(ax) ≈ abs(x)
+                end
+
+                let x = zero(T(42))
+                    @test x isa T
+                    @test value(x) == 0
+                end
+
+                let x = one(T(42))
+                    @test x isa T
+                    @test value(x) == 1
+                end
             end
 
             @testset "isless" begin
@@ -266,6 +279,20 @@ end
     end
 
     @testset "mixed" begin
+        using StochasticArithmetic: det_type, sto_type
+        @test det_type(SFloat64) == Float64
+        @test det_type(SFloat32) == Float32
+        @test det_type(Float32)  == Float32
+        @test det_type(Int32)    == Int32
+
+        @test sto_type(Float64)  == SFloat64
+        @test sto_type(Float32)  == SFloat32
+
+        @test promote_type(SFloat64, Float32) == SFloat64
+        @test promote_type(SFloat32, Float32) == SFloat32
+        @test promote_type(SFloat32, Int)     == SFloat32
+        @test promote_type(SFloat32, Float64) == SFloat64
+
         let
             x32 = SFloat32(32)
             x64 = SFloat64(64)

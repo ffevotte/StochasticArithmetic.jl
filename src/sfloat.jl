@@ -44,9 +44,8 @@ import Base: +, -, *, /, <, <=
 <=(a::SFloat, b::SFloat) = value(a) <= value(b)
 
 -(a::T)              where T<:SFloat = T(-a.value)
-Base.zero(::T)       where T<:SFloat = T(0.)
-Base.zero(::Type{T}) where T<:SFloat = T(0.)
-Base.one(::Type{T})  where T<:SFloat = T(1.)
+Base.zero(::Type{T}) where T<:SFloat = T(0)
+Base.one(::Type{T})  where T<:SFloat = T(1)
 Base.abs(x::T)       where T<:SFloat = T(abs(value(x)))
 
 

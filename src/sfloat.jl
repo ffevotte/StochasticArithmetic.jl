@@ -28,20 +28,25 @@ sto_type(::Type{T}) where {T} = SFloat{T}
 Base.promote_rule(::Type{T1}, ::Type{T2}) where {T1<:SFloat, T2} = sto_type(promote_type(det_type(T1), det_type(T2)))
 result_type(x::T1, y::T2) where {T1, T2} = promote_type(T1, T2)
 
-import Base: +, -, *, /, <, <=
-+(a::SFloat, b::SFloat) = result_type(a, b)(+(RND, a.value,  b.value))
-*(a::SFloat, b::SFloat) = result_type(a, b)(*(RND, a.value,  b.value))
--(a::SFloat, b::SFloat) = result_type(a, b)(+(RND, a.value, -b.value))
-/(a::SFloat, b::SFloat) = result_type(a, b)(/(RND, a.value,  b.value))
-<(a::SFloat, b::SFloat) = value(a) < value(b)
-<=(a::SFloat, b::SFloat) = value(a) <= value(b)
+#binary operators
+for op = (:+, :-, :*, :/)
+    eval(quote
+        Base.$op(a::SFloat,b::SFloat) = result_type(a,b)($op(RND, a.value,  b.value))
+    end)
+end
 
--(a::T)              where T<:SFloat = T(-a.value)
-Base.zero(::Type{T}) where T<:SFloat = T(0)
-Base.one(::Type{T})  where T<:SFloat = T(1)
-Base.abs(x::T)       where T<:SFloat = T(abs(value(x)))
+for op = (:<, :<=)
+    eval(quote
+        Base.$op(a::SFloat,b::SFloat) = $op(a.value,  b.value)
+    end)
+end
 
-
+#unary operators
+for op = (:-, :zero, :one, :abs)
+    eval(quote
+        Base.$op(a::SFloat) = SFloat($op(a.value))
+    end)
+end
 
 value(x::Number) = x
 deref(x) = x

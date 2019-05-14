@@ -49,7 +49,6 @@ Base.one(::Type{T})  where T<:SFloat = T(1)
 Base.abs(x::T)       where T<:SFloat = T(abs(value(x)))
 
 
-using Statistics
 
 value(x::Number) = x
 deref(x) = x

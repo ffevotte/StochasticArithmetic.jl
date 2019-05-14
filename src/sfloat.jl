@@ -1,4 +1,8 @@
-abstract type SFloat <: Real end
+struct SFloat{T} <: AbstractFloat
+    value :: T
+end
+value(x::SFloat) = x.value
+SFloat{T}(x::SFloat) where T = SFloat{T}(T(x.value))
 
 """
 Stochastic Float64
@@ -6,10 +10,7 @@ Stochastic Float64
 This type represents a double-precision (64-bit) floating-point number, on which
 every operation gets randomly rounded upwards or downwards.
 """
-struct SFloat64 <: SFloat
-    value :: Float64
-end
-SFloat64(x::SFloat64) = SFloat64(x.value)
+const SFloat64 = SFloat{Float64}
 
 """
 Stochastic Float32
@@ -17,20 +18,12 @@ Stochastic Float32
 This type represents a single-precision (32-bit) floating-point number, on which
 every operation gets randomly rounded upwards or downwards.
 """
-struct SFloat32 <: SFloat
-    value :: Float32
-end
-SFloat32(x::SFloat32) = SFloat32(x.value)
-SFloat64(x::SFloat32) = SFloat64(x.value)
-
-value(x::SFloat) = x.value
+const SFloat32 = SFloat{Float32}
 
 det_type(::Type{T}) where {T<:Real} = T
-det_type(::Type{SFloat64}) = Float64
-det_type(::Type{SFloat32}) = Float32
+det_type(::Type{SFloat{T}}) where {T} = T
 
-sto_type(::Type{Float64}) = SFloat64
-sto_type(::Type{Float32}) = SFloat32
+sto_type(::Type{T}) where {T} = SFloat{T}
 
 Base.promote_rule(::Type{T1}, ::Type{T2}) where {T1<:SFloat, T2} = sto_type(promote_type(det_type(T1), det_type(T2)))
 result_type(x::T1, y::T2) where {T1, T2} = promote_type(T1, T2)

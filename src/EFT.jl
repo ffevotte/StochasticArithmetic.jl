@@ -1,5 +1,5 @@
 module EFT
-export twoSum, twoProd, twoDiv
+export twoSum, twoDiff, twoProd, twoDiv
 
 # * Documentation of functions
 
@@ -56,6 +56,7 @@ function twoSum(a, b)
     return (x,y)
 end
 
+twoDiff(a, b) = twoSum(a,-b)
 
 @doc raw"""
     split(a)

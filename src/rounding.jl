@@ -39,7 +39,8 @@ macro defRound(op, eft)
     end
 end
 
-import Base: +, *, /
+import Base: +, -, *, /
 @defRound(+, EFT.twoSum)
+@defRound(-, EFT.twoDiff)
 @defRound(*, EFT.twoProd)
 @defRound(/, EFT.twoDiv)
